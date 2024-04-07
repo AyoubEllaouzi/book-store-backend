@@ -1,15 +1,12 @@
 package fr.norsys.bookstore.services.impl;
 
-import fr.norsys.bookstore.entities.Book;
 import fr.norsys.bookstore.entities.BookReview;
 import fr.norsys.bookstore.exceptions.ResourceNotFoundException;
-import fr.norsys.bookstore.repositories.BookRepository;
 import fr.norsys.bookstore.repositories.BookReviewRepository;
 import fr.norsys.bookstore.services.IBookReviewService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,20 +14,13 @@ import java.util.List;
 @Transactional
 public class BookReviewService implements IBookReviewService {
     private BookReviewRepository bookReviewRepository;
-    private BookRepository bookRepository;
-
 
     @Override
-    public void reserveBookReview(BookReview reservation) {
-
+    public void saveLending(BookReview bookReview) {
+        bookReviewRepository.save(bookReview);
     }
 
-    /* public void reserveBookReview(BookReview bookReview) {
-            Book book = bookReviewRepository.findById(bookReview.getBook().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("room id : "+bookReview.getBook().getId()));
-            bookReviewRepository.save(reservation);
-        }
-    */
+
     @Override
     public void updateBookReview(Long id, BookReview updatedBookReview) {
         BookReview bookReview = bookReviewRepository.findById(id)
@@ -40,6 +30,7 @@ public class BookReviewService implements IBookReviewService {
         bookReview.setBook(updatedBookReview.getBook());
         bookReview.setReview(updatedBookReview.getReview());
         bookReview.setRating(updatedBookReview.getRating());
+        bookReview.setRead(updatedBookReview.isRead());
         bookReviewRepository.save(bookReview);
     }
 
@@ -60,4 +51,10 @@ public class BookReviewService implements IBookReviewService {
     public List<BookReview> getAllBookReview() {
         return bookReviewRepository.findAll();
     }
+
+    @Override
+    public List<BookReview> getUserBooks(Long id) {
+        return bookReviewRepository.findByUserId(id);
+    }
+
 }

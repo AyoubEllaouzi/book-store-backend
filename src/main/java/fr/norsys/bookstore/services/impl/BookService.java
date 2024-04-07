@@ -1,6 +1,7 @@
 package fr.norsys.bookstore.services.impl;
 
 import fr.norsys.bookstore.entities.Book;
+import fr.norsys.bookstore.entities.User;
 import fr.norsys.bookstore.exceptions.ResourceNotFoundException;
 import fr.norsys.bookstore.repositories.BookRepository;
 import fr.norsys.bookstore.services.IBookService;
@@ -52,5 +53,10 @@ public class BookService implements IBookService {
     @Override
     public List<Book> getAllBook() {
         return bookRepository.findAll();
+    }
+
+    @Override
+    public List<Book> searchUsersByUsername(String query) {
+        return bookRepository.findByTitleContainingIgnoreCase(query);
     }
 }
